@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import Groq from 'groq-sdk';
 
 const groq = new Groq({
-  apiKey: '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'
+  apiKey: process.env.NEXT_PUBLIC_GROQ_AI
 });
 
 type RoadmapMilestone = {

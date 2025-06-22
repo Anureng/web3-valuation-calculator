@@ -134,11 +134,43 @@ export function ValuationResult({ valuation, breakdown, summary, aiInsights, isC
             <div>
               <h5 className="font-semibold mb-2 text-blue-700 dark:text-blue-300">Identified Competitors:</h5>
               <div className="grid gap-2">
-                {jsonData.competitors.map((competitor: string, index: number) => (
-                  <Badge key={index} variant="outline" className="justify-start">
-                    {competitor}
-                  </Badge>
-                ))}
+                {jsonData.competitors.map((competitor: any, index: number) => {
+                  // Handle both string and object formats
+                  if (typeof competitor === 'string') {
+                    return (
+                      <Badge key={index} variant="outline" className="justify-start">
+                        {competitor}
+                      </Badge>
+                    )
+                  } else if (competitor && typeof competitor === 'object') {
+                    // Handle object format with name, stage, valuation, etc.
+                    return (
+                      <div key={index} className="p-3 bg-white dark:bg-gray-800 rounded-lg border border-blue-200 dark:border-blue-700">
+                        <div className="flex justify-between items-start mb-2">
+                          <h6 className="font-medium text-blue-800 dark:text-blue-200">
+                            {competitor.name || 'Unknown Competitor'}
+                          </h6>
+                          {competitor.stage && (
+                            <Badge variant="secondary" className="text-xs">
+                              {competitor.stage}
+                            </Badge>
+                          )}
+                        </div>
+                        {competitor.valuation && (
+                          <p className="text-sm text-muted-foreground mb-1">
+                            <span className="font-medium">Valuation:</span> {competitor.valuation}
+                          </p>
+                        )}
+                        {competitor.keyDiff && (
+                          <p className="text-sm text-muted-foreground">
+                            <span className="font-medium">Key Difference:</span> {competitor.keyDiff}
+                          </p>
+                        )}
+                      </div>
+                    )
+                  }
+                  return null
+                })}
               </div>
             </div>
           ) : (
